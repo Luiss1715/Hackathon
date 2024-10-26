@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - VisionVend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <h1>Inventario</h1>
+
+        <!-- Tabla de Inventario -->
+        <section id="inventory-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad en Stock</th>
+                        <th>Precio Unitario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Generar filas dinámicamente con Jinja2 -->
+                    {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto[1] }}</td> <!-- nombre_producto -->
+                        <td>{{ producto[2] }}</td> <!-- cantidad_disponible -->
+                        <td>${{ producto[3] }}</td> <!-- precio_unitario -->
+                        <td>
+                            <form action="{{ url_for('eliminar_producto', id=producto[0]) }}" method="POST" style="display:inline;">
+                                <button class="action-button delete" type="submit">Eliminar</button>
+                            </form>
+                            <a href="{{ url_for('editar_producto', id=producto[0]) }}">
+                                <button class="action-button edit">Editar</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Acciones rápidas -->
+        <section id="quick-actions">
+            <button onclick="window.location.href='/agregar-producto'">Agregar Nuevo Producto</button>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

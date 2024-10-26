@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - VisionVend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <h1>Estadísticas</h1>
+
+        <!-- Gráfica de ventas por día -->
+        <section id="charts">
+            <div class="chart-card">
+                <h2>Tendencia de Ventas por Día</h2>
+                <canvas id="salesTrendChart"></canvas>
+            </div>
+
+            <!-- Gráfica de distribución del inventario -->
+            <div class="chart-card">
+                <h2>Distribución del Inventario por Categoría</h2>
+                <canvas id="inventoryDistributionChart"></canvas>
+            </div>
+
+            <!-- Otra gráfica de estadísticas -->
+            <div class="chart-card">
+                <h2>Productos Más Vendidos</h2>
+                <canvas id="topSellingProductsChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Incluir Chart.js para las gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

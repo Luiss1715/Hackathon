@@ -1,0 +1,188 @@
+/* Reset de márgenes y padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Asegura que el body use todo el ancho y altura */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f4f6; /* Fondo claro */
+    color: #333; /* Texto oscuro */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Estilos básicos para el header y footer */
+header, footer {
+    background-color: #005b99; /* Azul oscuro */
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+}
+
+footer a {
+    color: #d1e4ff; /* Azul claro para enlaces */
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+header nav ul li {
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #f39c12; /* Naranja de énfasis */
+}
+
+/* Estilos para el contenido principal */
+main {
+    flex: 1;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para tarjetas de información */
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px;
+    border-left: 4px solid #007acc;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+    color: #005b99; /* Azul oscuro */
+}
+
+.card p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #007acc; /* Azul principal */
+}
+
+/* Botones de acción */
+button {
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #005b99;
+}
+
+/* Estilos para formularios */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #005b99;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #f3f4f6;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+/* Tablas con diseño limpio */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #007acc;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f3f4f6;
+}
+
+td {
+    color: #333;
+}
+
+/* Mensajes de alerta */
+.alert {
+    background: #ffefc1;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    border-left: 4px solid #f39c12;
+    color: #cc8b12;
+    font-weight: bold;
+}

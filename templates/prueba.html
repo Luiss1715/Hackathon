@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f5;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .main-container {
+            display: flex;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .camera-container {
+            flex: 2;
+            text-align: center;
+            padding-right: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        video {
+            border-radius: 10px;
+            border: 3px solid #007BFF;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: auto;
+        }
+
+        #capture {
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #capture:hover {
+            background-color: #0056b3;
+        }
+
+        #close-sale {
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #close-sale:hover {
+            background-color: #218838;
+        }
+
+        #message, #delete-message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #message {
+            color: #28a745;
+        }
+
+        #delete-message {
+            color: #d9534f;
+        }
+
+        .product-list-container {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #product-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #product-list li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+        }
+
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <div class="main-container">
+        <div class="camera-container">
+            <h1>Captura de imagen desde la cámara</h1>
+            <video id="video" autoplay playsinline></video>
+            <br>
+            <button id="capture">Tomar foto</button>
+            <p id="message"></p>
+            <canvas id="canvas" width="640" height="480"></canvas>
+        </div>
+
+        <div class="product-list-container">
+            <h2>Productos Agregados</h2>
+            <ul id="product-list"></ul>
+            <!-- Sección para mostrar el mensaje de eliminación -->
+            <p id="delete-message"></p>
+            <!-- Botón para cerrar la venta -->
+            <button id="close-sale">Cerrar Venta</button>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+        const message = document.getElementById('message');
+        const deleteMessage = document.getElementById('delete-message');
+        const productList = document.getElementById('product-list');
+        const closeSaleButton = document.getElementById('close-sale');
+        let productosAgregados = [];
+
+        // Obtener acceso a la cámara
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err) {
+                console.log("Error: " + err);
+            });
+
+        // Función para mostrar mensajes temporales
+        function mostrarMensajeTemporal(elemento, mensaje) {
+            elemento.innerHTML = mensaje;
+            elemento.style.opacity = 1;
+
+            // Desvanecer el mensaje después de 2 segundos
+            setTimeout(() => {
+                elemento.style.opacity = 0;
+            }, 4000);
+        }
+
+        // Función para capturar la imagen
+        captureButton.addEventListener('click', function () {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            fetch('/capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: imageData })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Mostrar mensaje de etiqueta guardada
+                    mostrarMensajeTemporal(message, `Etiqueta '${data.message}' guardada correctamente.`);
+                    
+                    // Agregar producto a la lista con botón de eliminar
+                    const newProduct = document.createElement('li');
+                    newProduct.innerHTML = `
+                        Producto: ${data.message}
+                        <button class="remove-btn">&times;</button>
+                    `;
+                    productList.appendChild(newProduct);
+                    productosAgregados.push(data.message);
+
+                    // Botón para eliminar el producto
+                    newProduct.querySelector('.remove-btn').addEventListener('click', function () {
+                        productList.removeChild(newProduct);
+                        productosAgregados = productosAgregados.filter(product => product !== data.message);
+
+                        // Enviar solicitud para aumentar la cantidad en 1 en la base de datos
+                        fetch('/increase_quantity', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ producto: data.message })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log(result.message);
+
+                            // Mostrar mensaje de producto eliminado
+                            mostrarMensajeTemporal(deleteMessage, `Producto '${data.message}' eliminado correctamente.`);
+                        })
+                        .catch(error => console.log(error));
+                    });
+                })
+                .catch(error => console.log(error));
+        });
+
+        // Función para cerrar la venta
+        closeSaleButton.addEventListener('click', function () {
+            if (productosAgregados.length === 0) {
+                mostrarMensajeTemporal(message, 'No hay productos agregados.');
+                return;
+            }
+
+            // Enviar productos al servidor para cerrar la venta
+            fetch('/close_sale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productos: productosAgregados })
+            })
+            .then(response => response.json())
+            .then(data => {
+                mostrarMensajeTemporal(message, `Venta cerrada con éxito. ${data.message}`);
+                productList.innerHTML = ''; // Limpiar la lista de productos
+                productosAgregados = [];    // Limpiar los productos agregados
+            })
+            .catch(error => console.log(error));
+        });
+    </script>
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

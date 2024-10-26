@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - VisionVend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #005b99;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #005b99;
+            margin-bottom: 30px;
+        }
+
+        #summary {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 200px;
+            margin: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card h2 {
+            color: #007acc;
+            font-size: 1.2em;
+        }
+
+        .card p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <!-- Contenido Principal del Dashboard -->
+    <main>
+        <h1>Dashboard</h1>
+
+        <!-- Resumen General -->
+        <section id="summary">
+            <div class="card">
+                <h2>Ventas Totales</h2>
+                <p>${{ ventas_totales }}</p>
+            </div>
+            <div class="card">
+                <h2>Productos en Inventario</h2>
+                <p>{{ productos_totales }} productos</p>
+            </div>
+            <div class="card">
+                <h2>Productos con Bajo Stock</h2>
+                <p>{{ bajo_stock }} productos</p>
+            </div>
+            <div class="card">
+                <h2>Nuevas Recomendaciones</h2>
+                <p>{{ recomendaciones }} recomendaciones</p>
+            </div>
+        </section>
+
+        <!-- Gráficas -->
+        <section id="charts">
+            <h2>Tendencias de Ventas</h2>
+            <canvas id="salesChart"></canvas>
+            <h2>Distribución de Inventario</h2>
+            <canvas id="inventoryChart"></canvas>
+        </section>
+
+        <!-- Alertas y Notificaciones -->
+        <section id="alerts">
+            <h2>Alertas</h2>
+            <ul>
+                <li>Producto A tiene bajo stock</li>
+                <li>Producto B ha sido recientemente agregado</li>
+            </ul>
+        </section>
+
+        <!-- Acciones Rápidas -->
+        <section id="quick-actions">
+            <h2>Acciones Rápidas</h2>
+            <button onclick="window.location.href='/agregar-producto'">Agregar Nuevo Producto</button>
+            <button onclick="window.location.href='/registrar-venta'">Registrar Nueva Venta</button>
+            <button onclick="window.location.href='/inventario'">Ver Inventario Completo</button>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

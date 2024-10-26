@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <h1>Editar Producto</h1>
+
+        <!-- Formulario para editar un producto -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="nombre_producto">Nombre del Producto:</label>
+                <input type="text" id="nombre_producto" name="nombre_producto" value="{{ producto[0] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cantidad_disponible">Cantidad Disponible:</label>
+                <input type="number" id="cantidad_disponible" name="cantidad_disponible" value="{{ producto[1] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precio">Precio Unitario:</label>
+                <input type="number" id="precio" name="precio" step="0.01" value="{{ producto[2] }}" required>
+            </div>
+
+            <button type="submit" class="action-button edit">Guardar Cambios</button>
+            <button type="button" class="action-button" onclick="window.location.href='/inventario'">Cancelar</button>
+        </form>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

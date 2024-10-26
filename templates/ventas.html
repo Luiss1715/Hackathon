@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas - VisionVend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <h1>Ventas</h1>
+
+        <!-- Tabla de Ventas -->
+        <section id="sales-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Fecha de venta</th>
+                        <th>Hora de venta</th>
+                        <th>Proveedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                    <tr>
+                        <td>{{ venta[0] }}</td> <!-- nombre_producto -->
+                        <td>${{ venta[1] }}</td> <!-- cantidad -->
+                        <td>{{ venta[2] }}</td> <!-- precio_unitario -->
+                        <td>{{ venta[3] }}</td> <!-- total -->
+                        <td>{{ venta[4] }}</td> <!-- fecha_comprada -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+       
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
